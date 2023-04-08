@@ -1,6 +1,6 @@
 {
   "name": "money-manager",
-  "version": "23.04.09-1",
+  "version": "23.04.09-2",
   "private": true,
   "scripts": {
     "dev": "vite",
