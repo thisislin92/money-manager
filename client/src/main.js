@@ -9,6 +9,8 @@ import "sweetalert2/dist/sweetalert2.min.css";
 import VueChartkick from "vue-chartkick";
 import "chartkick/chart.js";
 
+import VueNumberFormat from '@coders-tm/vue-number-format'
+
 import "./assets/main.css";
 
 const app = createApp(App);
@@ -22,6 +24,7 @@ app.use(pinia);
 app.use(router);
 app.use(VueSweetalert2);
 app.use(VueChartkick);
+app.use(VueNumberFormat, { precision: 4 })
 
 if (import.meta.env.NODE_ENV !== "production") {
   app.config.devtools = true;

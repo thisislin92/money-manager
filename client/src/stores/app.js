@@ -134,6 +134,17 @@ export const useAppStore = defineStore("app", {
         if (!result?.data) {
           throw new Error("Frontend error: somehow unable to get result.data");
         }
+        
+        // also create a new attribute containing the formatted transaction amount
+        result.data = result.data.map(transaction => {
+          return {
+            ...transaction,
+            formattedAmount: transaction?.amount?.toLocaleString("id-ID", {
+              style: "currency",
+              currency: "IDR",
+            }),
+          }
+        })
 
         // also save in pinia's global state
         this.transactions = result.data;

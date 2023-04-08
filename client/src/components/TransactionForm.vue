@@ -1,9 +1,13 @@
 <script>
 import { useAppStore } from "@/stores/app";
 import { mapState, mapActions } from "pinia";
+import { component as VueNumber } from '@coders-tm/vue-number-format'
 
 export default {
   name: "TransactionForm",
+  components: {
+    VueNumber,
+  },
   methods: {
     ...mapActions(useAppStore, [
       "handleCreateTransaction",
@@ -25,15 +29,30 @@ export default {
   },
   computed: {
     ...mapState(useAppStore, ["categories", "wallets"]),
+    formattedAmount: function () {
+      if (!this.amount) return ''
+      const formatter = new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR'
+      })
+      return formatter.format(this.amount)
+    }
   },
   data() {
     return {
       name: "",
-      amount: 0,
+      amount: null,
       type: "",
       transactionDateTime: "",
       CategoryId: 0,
       WalletId: 0,
+      number: {
+        decimal: ',',
+        separator: '.',
+        prefix: 'Rp. ',
+        precision: 2,
+        masked: false,
+      },
     };
   },
   mounted() {
@@ -52,7 +71,7 @@ export default {
     </div>
     <div class="form-group">
       <label for="amount">Amount</label>
-      <input class="form-control" id="amount" v-model="amount" />
+        <div><vue-number class="form-control" v-model="amount" v-bind="number"></vue-number></div>
     </div>
     <div class="form-group">
       <label for="type">Type</label>

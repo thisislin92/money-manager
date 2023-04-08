@@ -30,17 +30,6 @@ export default {
       }, {});
       return finalResult;
     },
-
-    formattedAmount() {
-      return this.transactions.amount.length > 0
-        ? this.transactions.amount.map((amount) => {
-            return amount.toLocaleString("id-ID", {
-              style: "currency",
-              currency: "IDR",
-            });
-          })
-        : [];
-    },
   },
   mounted() {
     this.getAllTransactions();
@@ -81,7 +70,7 @@ export default {
             <tr v-for="transaction of transactions" v-bind:key="transaction.id">
               <td>{{ transaction.id }}</td>
               <td>{{ transaction.name }}</td>
-              <td>Rp.{{ transaction.amount }}</td>
+              <td>{{ transaction.formattedAmount }}</td>
               <td>{{ transaction.transactionDateTime }}</td>
               <td>{{ transaction.Category?.name }}</td>
             </tr>
