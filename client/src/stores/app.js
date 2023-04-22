@@ -11,6 +11,8 @@ export const useAppStore = defineStore("app", {
     conversionResult: 0,
     cmcResponse: {},
     user: {},
+    totalNetWorth: 0,
+    formattedNetWorth: "",
   }),
   actions: {
     checkAuth() {
@@ -144,10 +146,10 @@ export const useAppStore = defineStore("app", {
               currency: "IDR",
             }),
             formattedTransactionDate: new Date(transaction?.transactionDateTime)?.toLocaleString("id-ID", {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
               /* hour: '2-digit', */
               /* minute: '2-digit', */
               /* second: '2-digit', */
@@ -157,6 +159,23 @@ export const useAppStore = defineStore("app", {
 
         // also save in pinia's global state
         this.transactions = result.data;
+
+        // also calculate the total net totalNetWorth
+        const totalNetWorth = result.data.reduce((total, transaction) => {
+          if (transaction.type === "income") {
+            return total + transaction.amount;
+          } else {
+            return total - transaction.amount;
+          }
+        }, 0)
+        this.totalNetWorth = totalNetWorth;
+
+        // also format it one time
+        const formattedNetWorth = totalNetWorth.toLocaleString("id-ID", {
+          style: "currency",
+          currency: "IDR",
+        });
+        this.formattedNetWorth = formattedNetWorth;
 
         return result.data;
       } catch (error) {

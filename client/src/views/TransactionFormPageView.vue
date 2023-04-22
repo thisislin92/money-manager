@@ -13,7 +13,7 @@ export default {
 </script>
 
 <template>
-  <section class="my-4" id="form-section">
+  <section class="my-3" id="form-section">
     <div class="container-fluid">
       <div class="container px-4">
         <div class="row">

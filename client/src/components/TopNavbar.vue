@@ -8,25 +8,32 @@ export default {
   },
   components: {},
   methods: {
-    ...mapActions(useAppStore, ["checkAuth"]),
-    // collapseNavbar() {
-    //   $("#navbarNav").collapse("hide");
-    // },
+    ...mapActions(useAppStore, ["checkAuth", "getAllTransactions"]),
+
+    collapseNavbar() {
+      let navbarCollapse = document.querySelector('#navbarNav');
+      if (navbarCollapse.classList.contains('show')) {
+        navbarCollapse.classList.remove('show');
+      }
+    },
+
   },
   computed: {
-    ...mapState(useAppStore, ["isLoggedIn", "handleLogout"]),
+    ...mapState(useAppStore, ["isLoggedIn", "handleLogout", "formattedNetWorth"]),
+
   },
   mounted() {
     this.checkAuth();
+    this.getAllTransactions();
   },
 };
 </script>
 
 <template>
-  <nav class="mb-4 pb-3 navbar navbar-expand-lg navbar-dark bg-dark">
-    <RouterLink to="/" class="nav-link" active-class="router-link-exact-active">
-      <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="50" />
-    </RouterLink>
+  <nav class="pb-3 ps-3 pe-3 navbar d-flex justify-content-between navbar-dark bg-dark">
+    <span class="text-light fs-3 fw-bold me-auto">
+      {{ formattedNetWorth }}
+    </span>
     <button
       class="navbar-toggler"
       type="button"
@@ -38,7 +45,7 @@ export default {
     >
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
+    <div class="collapse navbar-collapse ms-auto" id="navbarNav">
       <ul v-if="this.isLoggedIn" class="navbar-nav">
         <li class="nav-item">
           <RouterLink

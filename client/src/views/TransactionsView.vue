@@ -32,16 +32,24 @@ export default {
     },
 
     transactionsByDate() {
-      const transactionsByDate = []
-      let currentDate = null
+      const sortedTransactions = this.transactions.slice().sort((a, b) => new Date(b.transactionDateTime) - new Date(a.transactionDateTime))
 
-      this.transactions.forEach((transaction) => {
-        const transactionDate = new Date(transaction.transactionDateTime).toLocaleDateString()
+      const transactionsByDate = [];
+      let currentDate = null;
+
+      sortedTransactions.forEach((transaction) => {
+        const transactionDate = new Date(transaction.transactionDateTime).toLocaleDateString("id-ID", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+        console.log(transactionDate)
 
         if (transactionDate !== currentDate) {
           currentDate = transactionDate
           const transactionsForDate = [transaction]
-          transactionsByDate.push({ date: currentDate, transactions: transactionsForDate })
+          transactionsByDate.push({ date: new Date(currentDate), transactions: transactionsForDate })
         } else {
           const index = transactionsByDate.length - 1
           transactionsByDate[index].transactions.push(transaction)
@@ -60,17 +68,9 @@ export default {
 </script>
 
 <template>
-  <div class="card text-dark p-4 mb-4">
+  <div class="text-dark p-3 mb-4">
     <div class="col-12 mb-4">
       <h1>Your Transactions</h1>
-    </div>
-    <div class="col-4 p-4">
-      <button
-        @click="this.$router.push('/transactions-create')"
-        class="btn btn-primary"
-      >
-        Create new Transaction
-      </button>
     </div>
     <div v-if="transactions.length > 0" class="row">
       <div class="col-12 pb-4">
@@ -83,7 +83,8 @@ export default {
               year: 'numeric',
               month: 'long',
               day: 'numeric',
-            }) }}</h3>
+            }) }}
+          </h3>
           <div class="transaction-row" v-for="transaction of dateGroup.transactions" :key="transaction.id">
             <div class="d-flex">
               <div class="placeholder me-2 rounded-circle d-flex justify-content-center align-items-center mr-3" style="width: 25px; height: 25px;"></div>
